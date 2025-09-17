@@ -1,5 +1,7 @@
 # Tic-Tac-Toe — React + TypeScript + Vite
 
+![alt text](screenshot_tic_tac_toe.png)
+
 A lightweight Tic-Tac-Toe built with React, TypeScript, and Vite.  
 Includes move history (time travel) and automatic winner detection.
 
