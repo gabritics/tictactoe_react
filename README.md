@@ -1,69 +1,81 @@
-# React + TypeScript + Vite
+# Tic-Tac-Toe — React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight Tic-Tac-Toe built with React, TypeScript, and Vite.  
+Includes move history (time travel) and automatic winner detection.
 
-Currently, two official plugins are available:
+## Features
+- 3×3 board with alternating X/O turns
+- Winner detection (rows, columns, diagonals)
+- Move history with jump-to-move buttons
+- Clean TypeScript types and React components
+- Fast dev experience via Vite + HMR
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Requirements
+- Node.js 18+
+- npm, pnpm, or yarn
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Install and run:
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+    git clone <your-repo-url>
+    cd <your-project-directory>
+    npm install
+    npm run dev
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+Vite serves the app at http://localhost:5173 by default.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Build and Preview
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+    npm run build
+    npm run preview
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Project Structure (simplified)
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    src/
+      main.tsx            # App bootstrap
+      index.css           # Styles (.game, .game-board, .board-grid, .square, .status)
+      Game.tsx / App.tsx  # Game, Board, and Square components
+
+## How It Works
+- State (in `Game`)
+    - `history: Squares[]` — list of all board states (each has 9 cells)
+    - `currentMove: number` — index of the active step
+    - `xIsNext: boolean` — derived from `currentMove`
+    - `currentSquares = history[currentMove]`
+- Playing a move  
+  `handlePlay(nextSquares)` appends the new board to `history` (and trims future entries if you time-travel) and updates `currentMove`.
+- Time travel  
+  `history.map((_, i) => <button onClick={() => jumpTo(i)} />)`
+- Winner detection  
+  `calculateWinner(squares)` checks eight winning lines:
+
+  const lines = [
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],
+  [0, 4, 8], [2, 4, 6],
+  ];
+
+## Types (key aliases)
+
+    type SquareValue = string | null; // "X" | "O" | null
+    type Squares = SquareValue[];     // 9-length array for the board
+
+## NPM Scripts
+- `dev` — start Vite dev server
+- `build` — production build
+- `preview` — preview the production build
+- `lint` — run ESLint (if configured)
+
+## Linting (optional)
+Use `@typescript-eslint` for type-aware rules. Optionally add `eslint-plugin-react-x` and `eslint-plugin-react-dom`.
+
+## Customization Ideas
+- Detect draws (no winner and no empty cells)
+- Restart button
+- Sort move list (asc/desc)
+- Show move coordinates or mini-board previews
+- Generalize to larger boards; add simple tests
+
+## License
+Choose a license (e.g., MIT) and add a LICENSE file.
